@@ -1,3 +1,18 @@
+Skip to content
+ This repository
+Explore
+Gist
+Blog
+Help
+igelkotten igelkotten
+ 
+2  Unwatch 
+  Star 0
+ Fork 01DV020/labs
+ branch: master  labs/Lab 1/Lab_1.tex
+Jacob Lindehofftlija 6 days ago Rename Labb_1.tex to Lab_1.tex
+1 contributor
+172 lines (149 sloc)  9.587 kb RawBlameHistory   
 %----------------------------------------------------------------------------------------
 %	Inställningar och dokumentkonfiguration
 %----------------------------------------------------------------------------------------
@@ -5,7 +20,7 @@
 \documentclass[paper=a4, fontsize=11pt]{report} % A4-sida och 11 punkters fontstorlek
 
 \usepackage[T1]{fontenc} % 8-bitarskodning som har 256 glyfer
-\usepackage[swedish]{babel} % Svenskt språk
+\usepackage[english]{babel} % Svenskt språk(ändrat till engelska)
 \usepackage[utf8]{inputenc} % För svenska tecken
 \usepackage{dtklogos} % Logos
 \usepackage{wallpaper} % Bakgrundsbild
@@ -15,10 +30,10 @@
 \usepackage{textcomp}
 \usepackage{xifthen}% provides \isempty test
 \pagestyle{fancyplain} % Använd sidhuvud och sidfot på alla sidor
-\fancyhead[L]{Laboration 1 -- 1DV416 -- HT13 -- Windowsadministraion I} % Titel till vänster i sidhuvud
+\fancyhead[L]{Laboration 1 -- 1DV020 -- VT15 -- Server administraion I} % Titel till vänster i sidhuvud
 \fancyhead[C]{} % Tomt i mitten
 \fancyhead[R]{} % Tomt till höger
-\fancyfoot[L]{{\color{gray}\textcopyright \ 2013 Jacob Lindehoff}} % Tomt till vänster
+\fancyfoot[L]{{\color{gray}\textcopyright \ 2015 Jacob Lindehoff, Kristoffer Schill}} % Tomt till vänster
 \fancyfoot[C]{}  % Tomt i mitten
 \fancyfoot[R]{\thepage} % Sidnumrering till höger i sidfoten
 \renewcommand\thesection{\arabic{section}} % Section beter sig som i dokumentklassen article
@@ -62,39 +77,43 @@
 \noindent % Tabba inte in på första meningen
 
 %------------------------------------------------
-%	Introduktion
+%	Introduction
 %------------------------------------------------
-\section{Introduktion}
-Du är IT-tekniker på ett ganska litet ny startat företag och ledningen har gett dig i uppgift att installera upp företagets första servrar och klienter. Det har satts upp en del krav på systemet som du hittar i Kapitel~\ref{tasks}. 
+\section{Introduction}
 
-Det är viktigt att du läst igenom labben noggrant innan du börjar laborationen. Innan du kan påbörja labben måste du följa anvisningarna på kurshemsidan eller under Kapitel~\ref{enviroment}.
+You are an IT-technican on a small newly founded company and the board have given you the task to install the company's first servers and clients. There are some requirements on the system that you should find in the Chapter~\ref{tasks}
 
+It is importaint that you have read the lab thoroughly before you start with the laboration. You must follow the instructions on the course page or under chapter ~\ref{enviroment}.
+
+All machines that are created are saved under your own folder in: ... 
 Alla maskiner som skapas ska sparas på L: under din egna mapp i 1DV416: \textbf{L:\textbackslash VirtualLabs\textbackslash Courses\textbackslash 1DV416\textbackslash users\textbackslash 2013\textbackslash [Ditt Användarnamn]\textbackslash }
 
 %------------------------------------------------
 %	Deadline
 %------------------------------------------------
-\section{Dealine}
-Det finns två laborationstillfällen kopplat till den här modulen, vid dessa tillfällen ges möjlighet för hjälp om du så behöver. För att hinna med så kommer du förmodligen att behöva avsätta mer tid än dessa tillfällen.
-\paragraph{Redovisning} Du kommer inte att redovisa labben under något av laborationstillfällena utan detta görs i den labbrapport som du ska skriva. Denna rapport ska skickas in senast den {\color{red}24:e november kl. 23.59} till kursansvarig.
+\section{Deadline}
 
-På kurshemsidan finns en \LaTeX rapportmall som ni ska använda vid redovisningen av laborationen.
+There are two laboratory sessions connected to this module, at these sessions you are given the opportunity to get help if swo needed. To be able to finish the modules you are likely needed to spend more time on your own.
+
+\paragraph{Accounting} You will show your work and demonstrate your progress at any of these labsession, prepare a small document with an overview of your configuration/setup if needed for overview.
+
 \pagebreak
 %------------------------------------------------
 %	Uppgift
 %------------------------------------------------
-\section{Uppgift}
+\section{Assignment}
 \begin{figure}[h]
 \centering
 \includegraphics[width=1\linewidth]{./network}
-\caption[Figur över nätverket i labb 1]{Nätverkets som ska sättas upp i Labb 1.}
+\caption[Figur över nätverket i labb 1]{The network as it should be setup in Labb 1.}
 \label{fig:network}
 \end{figure}
 
-
-Ni har fått i uppdrag att sätta upp ett nystartat företags nätverk. I \figurename  \ref{fig:network} ser ni hur nätverket ska se ut när ni är klara men labb 1.
+You have been given the the task to setup a newly founded company's network. In \figurename \ref{fig:network} you should see how the network should look when you are done with lab 1.
 
 Det är ett mycket enkelt nätverk ni ska sätta upp med en filserver och två klienter. För att komma ut på Internet så måste ni även sätta upp en server som agerar router mellan LANet och Internet.
+
+The topology contains one Linux server, one Windows server, one Linux router and one client. Using the linux router as a gateway all the devices should be able to reach the internet.
 
 \section{Krav}
 \label{tasks}
@@ -103,65 +122,70 @@ Utöver nätverksskissen har ni fått en del krav som företaget har satta upp:
 \begin{itemize}
     \item Alla maskiner ska:
     \begin{itemize}
-        \item vara konfigurerade enligt nätverksskissen i \figurename \ref{fig:network}
+        \item should be configured as the networksketch in \figurename \ref{fig:network}
         \item köra statisk IP-adressering, nätadresser får ni själva välja men motivera ert val i labbrapporten
-        \item komma ut på Internet via routermaskinen
-        \item ha Windows brandväggen påslagen
+        \item have static ip-addressing, the addresses is up to you to decide but you should be able to motivate your choice. 
+		\item should have internet access using the linux router.
+        \item have proper firewall rules. This includes both the linux and windows machines.
     \end{itemize}
-    \item Man ska kunna pinga alla maskiners LAN nätverk
-    \item Ni ska själva komma fram till vilka namn ni ska använda på era servrar och klienter, tänk på att motivera ert val i labbrapporten
-    \item Klienterna \& filserven ska ha 4 lokala användarkonton: \\ \textit{OBS! För att utdelningarna ska fungerar så måste det vara samma lösenord på klienterna och serven för ett individuellt konto}
-    \begin{itemize}
-        \item Kalle Karlsson, användarnamn: \textbf{Kalle}
-        \item Anna Johansson, användarnamn: \textbf{Anna}
-        \item Stina Nilsson, användarnamn: \textbf{Stina}
-        \item Johan Andersson, användarnamn: \textbf{Johan}
-    \end{itemize}
-    \item Specifika maskinkrav:
+    \item Should be able to ping all the devices on the LAN.
+    \item Have a proper naming convention.
+    
+	#\item Klienterna \& filserven ska ha 4 lokala användarkonton: \\ \textit{OBS! För att utdelningarna ska fungerar så måste det vara samma lösenord på klienterna och serven för ett individuellt konto}
+    #\begin{itemize}
+    #    \item Kalle Karlsson, användarnamn: \textbf{Kalle}
+    #    \item Anna Johansson, användarnamn: \textbf{Anna}
+    #    \item Stina Nilsson, användarnamn: \textbf{Stina}
+    #    \item Johan Andersson, användarnamn: \textbf{Johan}
+    #\end{itemize}
+    
+	\item Specifika maskinkrav:
     \begin{itemize}
         \item \textbf{ISP Gateway}
         \begin{itemize}
-            \item detta är den enda maskinen som ni inte installerar själva, det är en förkonfigurerad maskin som ni skapar en länkad klon av
-            \item templaten finns här: \textbf{L:\textbackslash VirtualLabs\textbackslash Files\textbackslash Templates\textbackslash ISP Gateway Template\textbackslash }
+            
+			\item This is the only machine that you will not install yourself, it is a predefined machine that you will make a linked clone of.
+            \item The template is located at \textbf{\textbackslash\textbackslash: VirtualLabs\textbackslash Files\textbackslash Templates\textbackslash ISP Gateway Template\textbackslash }
         \end{itemize}
 
-        \item \textbf{Routermaskinen}
+        \item \textbf{Linuxrouter}
         \begin{itemize}
-            \item ska ha två nätverkskort, ett till LAN och ett till WAN
-            \item WANet ska vara konfigurerat enligt nätverksskissen i \figurename \ref{fig:network}, \textit{OBS! För att kunna göra namnuppslag så måste man använda sig av ISP Gatwayens DNS server.}
-            \item Ska användas som en form av webbproxy, detta uppnås genom att installerar rollen \textbf{Remote Access -> Routing}
-            \item När rollen är installerad öppnar man upp MMCn för \textbf{Routing and Remote Access} och konfigurerar NAT mellan LANet och WANet
+			\item should have two network cards, one for the WAN and one for the local LAN.
+            \item The WANet should be configured according to the network sketch in \figurename \ref{fig:network}, \textit{Observe! To be able to lookups it needs to use the ISP Gateways DNS server.}
+			
         \end{itemize}
 
-        \item \textbf{Filserven}
-        \begin{itemize}
-            \item Följande tre lokala grupper ska finnas
-            \begin{itemize}
-                \item \textbf{All-Users} medlemmar: \textbf{Anna, Stina, Kalle \& Johan}
-                \item \textbf{Accounting} medlemmar: \textbf{Anna, Stina \& Johan}
-                \item \textbf{Sales} medlemmar: \textbf{Kalle, Stina \& Johan}
-            \end{itemize}
-            \item En extra hårddisk där de utdelade katalogerna ska placeras
-            \item 7 utdelade kataloger: \\ \textit{OBS! \textbf{Administrator} och \textbf{System} ska alltid har fulla rättigheter till alla utdelningar}
-            \begin{itemize}
-                \item Namn: \textbf{Share}, rättigheter: \textbf{All-Users}(Läs/Skriv)
-                \item Namn: \textbf{Accounting}, rättigheter: \textbf{Accounting}(Läs/Skriv)
-                \item Namn: \textbf{Sales}, rättigheter: \textbf{Sales}(Läs/Skriv), \textbf{Accounting}(Läs)
-                \item Namn: \textbf{Kalle}, rättigheter: \textbf{Kalle}(Läs/Skriv)
-                \item Namn: \textbf{Anna}, rättigheter: \textbf{Anna}(Läs/Skriv)
-                \item Namn: \textbf{Stina}, rättigheter: \textbf{Stina}(Läs/Skriv)
-                \item Namn: \textbf{Johan}, rättigheter: \textbf{Johan}(Läs/Skriv)
-            \end{itemize}
-        \end{itemize}
+        #\item \textbf{Filserven}
+        #\begin{itemize}
+        #    \item Följande tre lokala grupper ska finnas
+        #    \begin{itemize}
+        #        \item \textbf{All-Users} medlemmar: \textbf{Anna, Stina, Kalle \& Johan}
+        #        \item \textbf{Accounting} medlemmar: \textbf{Anna, Stina \& Johan}
+        #    \end{itemize}
+        #    \item En extra hårddisk där de utdelade katalogerna ska placeras
+        #    \item 7 utdelade kataloger: \\ \textit{OBS! \textbf{Administrator} och \textbf{System} ska alltid har fulla rättigheter till alla utdelningar}
+        #    \begin{itemize}
+        #        \item Namn: \textbf{Share}, rättigheter: \textbf{All-Users}(Läs/Skriv)
+        #        \item Namn: \textbf{Accounting}, rättigheter: \textbf{Accounting}(Läs/Skriv)
+        #        \item Namn: \textbf{Sales}, rättigheter: \textbf{Sales}(Läs/Skriv), \textbf{Accounting}(Läs)
+        #        \item Namn: \textbf{Kalle}, rättigheter: \textbf{Kalle}(Läs/Skriv)
+        #        \item Namn: \textbf{Anna}, rättigheter: \textbf{Anna}(Läs/Skriv)
+        #        \item Namn: \textbf{Stina}, rättigheter: \textbf{Stina}(Läs/Skriv)
+        #        \item Namn: \textbf{Johan}, rättigheter: \textbf{Johan}(Läs/Skriv)
+        #    \end{itemize}
+        #\end{itemize}
     \end{itemize}
 \end{itemize}
 
-\section{Arbetsmiljö}
+\section{Workenviroment}
 \label{enviroment}
-Du kommer att använda VMware Workstation för att utföra denna labb. Du kommer endast att använda templates för ISP Gateway i den här labben resten du får själv skapa.
 
-För att kunna kunna börja laborationen så måste du anmält dig till MSDNAA och en labbgrupp. När du gjort det så kan det ta upp till en arbetsdag innan du lagts till i systemen. 
-\paragraph{Hjälpmedel} Till din hjälp så finns \win{2012 R2} och Windows 8.1 ISOs på 
+You will be using VMware Workstation to be able to accomplish this lab. You will only use templates for the ISP Gateway in this lab. The rest is up to you to construct from isofiles.
+ 
+To be able to start this laboration you need to have signed up for MSNDAA and a labbgroup. When you have done this it takes up to a workday before you are put into the system.
+
+\paragraph{ISO} Till din hjälp så finns \win{2012 R2} och Windows 8.1 ISOs på 
+
 L:\textbackslash VirtualLabs\textbackslash Files\textbackslash CD\textbackslash Microsoft\textbackslash 
 \begin{itemize}
 \item 9600.16384.WINBLUE\_RTM.130821-1623\_X64FRE\_SERVER\_EVAL\_EN-US-IRM\_SSS\_X64FREE\_EN-US\_DV5.ISO
@@ -169,3 +193,5 @@ L:\textbackslash VirtualLabs\textbackslash Files\textbackslash CD\textbackslash 
 \end{itemize}
 Windows 7 ISOn hittar du här: \textbf{L:\textbackslash VirtualLabs\textbackslash Files\textbackslash MSDNAA\textbackslash Operating Systems\textbackslash en\_windows\_7\_enterprise\_with\_sp1\_x64\_dvd\_620201.iso
 }\end{document}
+Status API Training Shop Blog About
+© 2015 GitHub, Inc. Terms Privacy Security Contact
