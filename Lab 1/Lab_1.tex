@@ -47,7 +47,7 @@
     \textsc{Linnéuniversitetet} \\ [25pt] % Universitetes namn
     \horrule{0.5pt} \\[0.4cm] % Tunn linje högst upp
     \huge Laboration 1\\ % Arbetes titel
-	\large \textcolor{gray}{1DV416 -- Windowsadministraion I}
+	\large \textcolor{gray}{1dv020 -- Serveradministraion}
     \horrule{0.5pt} \\[0.4cm] % Tunn linje längst ner
 }
 
@@ -66,12 +66,12 @@
 %------------------------------------------------
 \section{Introduction}
 
-You are an IT-technican on a small newly founded company and the board have given you the task to install the company's first servers and clients. There are some requirements on the system that you should find in the Chapter~\ref{tasks}
+You are an IT-technican on a small newly founded company and the board have given you the task to install the company's first servers and clients. There are some requirements on the system that you should find in Requirements~\ref{tasks}
 
-It is importaint that you have read the lab thoroughly before you start with the laboration. You must follow the instructions on the course page or under chapter ~\ref{enviroment}.
+It is importaint that you have read the lab thoroughly before you start with the laboration. You must follow the instructions under workenviroment ~\ref{enviroment}.
 
-All machines that are created are saved under your own folder in: ... 
-Alla maskiner som skapas ska sparas på L: under din egna mapp i 1DV416: \textbf{L:\textbackslash VirtualLabs\textbackslash Courses\textbackslash 1DV416\textbackslash users\textbackslash 2013\textbackslash [Ditt Användarnamn]\textbackslash }
+All machines that are created are saved under your own folder in: 
+\textbf{C:\textbackslash VirtualLabs\textbackslash Courses\textbackslash 1DV020\textbackslash users\textbackslash 2013\textbackslash [your username]\textbackslash }
 
 %------------------------------------------------
 %	Deadline
@@ -90,46 +90,47 @@ There are two laboratory sessions connected to this module, at these sessions yo
 \begin{figure}[h]
 \centering
 \includegraphics[width=1\linewidth]{./network}
-\caption[Figur över nätverket i labb 1]{The network as it should be setup in Labb 1.}
+\caption[Figure over network in Lab 1]{The network as it should be setup in Lab 1.}
 \label{fig:network}
 \end{figure}
 
 You have been given the the task to setup a newly founded company's network. In \figurename \ref{fig:network} you should see how the network should look when you are done with lab 1.
 
-Det är ett mycket enkelt nätverk ni ska sätta upp med en filserver och två klienter. För att komma ut på Internet så måste ni även sätta upp en server som agerar router mellan LANet och Internet.
+The topology contains one Linux server, one Windows Server 2012 R2 , one Linux machine as a router and one Windows 8.1 client on the internal. all of these should be connected to VMnet2. The Linux router is also connected to the ISP Gateway with the VMNet 4.
+We also have an external client on VMNet 9.
 
-The topology contains one Linux server, one Windows server, one Linux router and one client. Using the linux router as a gateway all the devices should be able to reach the internet.
-
-\section{Krav}
+\section{Requirements}
 \label{tasks}
-Utöver nätverksskissen har ni fått en del krav som företaget har satta upp:
+Aside from the network sketch there are some requirements the company have but on these.
 
 \begin{itemize}
-    \item Alla maskiner ska:
+    \item All machines should:
     \begin{itemize}
-        \item should be configured as the networksketch in \figurename \ref{fig:network}
-        \item köra statisk IP-adressering, nätadresser får ni själva välja men motivera ert val i labbrapporten
         \item have static ip-addressing, the addresses is up to you to decide but you should be able to motivate your choice. 
-		\item should have internet access using the linux router.
+	\item should have internet access using the linux router.
+	\item shoule be able to ping eachother on the their respective VMNet.
         \item have proper firewall rules. This includes both the linux and windows machines.
+    	\item Have a proper naming convention.
     \end{itemize}
-    \item Should be able to ping all the devices on the LAN.
-    \item Have a proper naming convention.
-	\item Specifika maskinkrav:
+	\item Specific machinerequirements:
     \begin{itemize}
         \item \textbf{ISP Gateway}
         \begin{itemize}
-            
-			\item This is the only machine that you will not install yourself, it is a predefined machine that you will make a linked clone of.
-            \item The template is located at \textbf{\textbackslash\textbackslash: VirtualLabs\textbackslash Files\textbackslash Templates\textbackslash ISP Gateway Template\textbackslash }
+		\item This is the only machine that you will not install yourself, it is a predefined machine that you will make a linked clone of.
+        	\item The template is located at \textbf{\textbackslash\textbackslash: VirtualLabs\textbackslash Files\textbackslash Templates\textbackslash ISP Gateway Template\textbackslash }
         \end{itemize}
 
         \item \textbf{Linuxrouter}
         \begin{itemize}
-			\item should have two network cards, one for the WAN and one for the local LAN.
-            \item The WANet should be configured according to the network sketch in \figurename \ref{fig:network}, \textit{Observe! To be able to lookups it needs to use the ISP Gateways DNS server.}
-			
+		\item should have two network interfaces, one for VMnet 4 pointing to the ISP Gateway and one for the local Server LAN VMnet2.
+            	\item The ISP pointing interface should be configured according to the network sketch in \figurename \ref{fig:network}, \textit{Observe! To be able to lookups it needs to use the ISP Gateways DNS server.}
         \end{itemize}
+        
+        \item \textbf{Other OS}
+        \begin{itemize}
+		\item Only be connected to their respective VMNet.
+        \end{itemize}
+        
     \end{itemize}
 \end{itemize}
 
@@ -140,12 +141,8 @@ You will be using VMware Workstation to be able to accomplish this lab. You will
  
 To be able to start this laboration you need to have signed up for MSNDAA and a labbgroup. When you have done this it takes up to a workday before you are put into the system.
 
-\paragraph{ISO} Till din hjälp så finns \win{2012 R2} och Windows 8.1 ISOs på 
+\paragraph{ISO} At your disposal there are \win{2012 R2} och Windows 8.1 ISOs på 
 
-L:\textbackslash VirtualLabs\textbackslash Files\textbackslash CD\textbackslash Microsoft\textbackslash 
-\begin{itemize}
-\item 9600.16384.WINBLUE\_RTM.130821-1623\_X64FRE\_SERVER\_EVAL\_EN-US-IRM\_SSS\_X64FREE\_EN-US\_DV5.ISO
-\item 9600.16384.WINBLUE\_RTM.130821-1623\_X64FRE\_ENTERPRISE\_EVAL\_EN-US-IRM\_CENA\_X64FREE\_EN-US\_DV5.ISO
-\end{itemize}
-Windows 7 ISOn hittar du här: \textbf{L:\textbackslash VirtualLabs\textbackslash Files\textbackslash MSDNAA\textbackslash Operating Systems\textbackslash en\_windows\_7\_enterprise\_with\_sp1\_x64\_dvd\_620201.iso
+C:\textbackslash VirtualLabs\textbackslash Files\textbackslash CD\textbackslash Microsoft\textbackslash 
+%kolla upp var imorgon.
 }\end{document}
