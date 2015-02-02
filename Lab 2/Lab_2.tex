@@ -117,18 +117,16 @@ The users should only be allowed to read and access their respective folder.
 
 \section{Requirements}
 \label{tasks}
-
 Aside from keeping the configuration where we left of(static ip's, firewalls , VMNet) It should be set up as in the Assignment. Firewall rules will be checked to be ‘decent’. Remember that if (as it should be) your firewall is properly setup you will need to make exception for the protocols you are implementing f.e. SMB and if you are using SWAT for samba you need to allow that traffic in.
-
 As previously your configuration should survive a reboot.
+
+\begin{itemize}
+	\item \textbf{Linux Server}
     \begin{itemize}
-        \item \textbf{Linux Server}
-        \begin{itemize}
 		\item one extra hdd partition as a functional NTFS, mounted on boot.
 		\item 3 Users Stina, Pelle and Lisa.
-		\item Each home directory is shared and can only be accessed by themself.
+		\item Each home directory is shared and can only be accessed by themselves.
 	\end{itemize}
-
 	\item \textbf{Windows Server}
 	\begin{itemize}
 		\item Create the three local user accounts: Pelle, Lisa and Stina.
@@ -138,8 +136,7 @@ As previously your configuration should survive a reboot.
 		\item important should be mounted as a folder in your NTFS directory. (f.e. C: -> important)
 		\item enforce ACL for "quick" so Pelle and Lisa may both read and write and Stina is only allowed to read.
 		\item enforce ACL for "important" so Stina may read and write, Lisa may read and Pelle is not allowed to even read it.
-	\end{itemize
-
+	\end{itemize}
 \end{itemize}
 
 \section{Workenviroment}
