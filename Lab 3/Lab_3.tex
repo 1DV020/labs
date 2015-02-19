@@ -113,7 +113,7 @@ First install bind9, bind9utils and dnsutils
 				\item altwww -> <dmz server>
 				\item company -> 203.0.113.22
 			\end{itemize}
-		\item Now that we see that we have our own zone we will register it to the ISP. To do this use a computer that refers to the ISP gateway as its DNS server 203.0.113.21 (should be all computers within your virtual enviroment) and direct one of their browsers to www.nic.lab . here you will be able to register a domain.
+		\item Now that we see that we have our own zone we will register it to the ISP. To do this use a computer that refers to the ISP gateway as its DNS server 203.0.113.21 (should be all computers within your virtual environment) and direct one of their browsers to www.nic.lab . here you will be able to register a domain.
 			
 			For the registration to work the DNS server needs to be correctly configured. When asked asked for a name server you direct it to: hq-ip-gw.static.lab (This is just an A record pointing to your linux routers external ip 203.0.113.22.)
 			
@@ -128,14 +128,14 @@ The ubuntu server and the internal client should not need to specify gateway or 
 \subsection{Web server}
 Install a web server on your newly created \textbf{dmzserver} on VMNet 5.
 \begin{enumerate}
-	\item Then setup two virtual hosts on that server. If your DNS settings are correct you should be able to reach the webserver from any browser on the network using the following addresses:
+	\item Then setup two virtual hosts on that server. If your DNS settings are correct you should be able to reach the web server from any browser on the network using the following addresses:
 		\begin{itemize}
 			\item www.mycompany.lab
 			\item altwww.mycompany.lab
 		\end{itemize}
 		so www.mycompany.lab should show one page and then altwww.mycompany.lab another.
 	\item Make a third page that is only seen when you connect to it using the port 2015.
-		All pages should of course be reacable at the same time.
+		All pages should of course be reachable at the same time.
 \end{enumerate}
 
 
