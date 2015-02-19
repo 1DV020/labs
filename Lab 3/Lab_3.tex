@@ -15,7 +15,7 @@
 \usepackage{textcomp}
 \usepackage{xifthen}% provides \isempty test
 \pagestyle{fancyplain} % Använd sidhuvud och sidfot på alla sidor
-\fancyhead[L]{Laboration 2 -- 1DV020 -- VT15 -- Server administraion I} % Titel till vänster i sidhuvud
+\fancyhead[L]{Laboration 3 -- 1DV020 -- VT15 -- Server administraion I} % Titel till vänster i sidhuvud
 \fancyhead[C]{} % Tomt i mitten
 \fancyhead[R]{} % Tomt till höger
 \fancyfoot[L]{{\color{gray}\textcopyright \ 2015 Jacob Lindehoff, Kristoffer Schill}} % Tomt till vänster
@@ -46,7 +46,7 @@
     \normalfont \normalsize
     \textsc{Linnéuniversitetet} \\ [25pt] % Universitetes namn
     \horrule{0.5pt} \\[0.4cm] % Tunn linje högst upp
-    \huge Laboration 2\\ % Arbetes titel
+    \huge Laboration 3\\ % Arbetes titel
 	\large \textcolor{gray}{1DV020 -- Serveradministraion}
     \horrule{0.5pt} \\[0.4cm] % Tunn linje längst ner
 }
@@ -66,7 +66,9 @@
 %------------------------------------------------
 \section{Introduction}
 
-For this lab we will look into filesystems, partitioning, permissions and how these can be applied in a server enviroment. We will use the enviroment from the point we left of.
+In this Laboration we will cover 3 concepts: DHCP, DNS and a Web server -  and see how they work together. As previously we will be using the lab from where we left off. We will also introduce a new VMNet (VMNet5) that will be having our DMZ on.
+
+The Linux server will be the main DNS for mycompany.lab. The Linux server will also act as web server for mycompany.lab and the windows server will be responsible for handing out IP addresses with DHCP.
 
 %------------------------------------------------
 %	Deadline
@@ -82,66 +84,67 @@ There are two laboratory sessions connected to this module, at these sessions yo
 %	Uppgift
 %------------------------------------------------
 \section{Assignment}
+The following fours sections with subtasks are the assignment:
 
-Your task now is to do a few different operations on both the linux and the windows servers. First you will set up a fileserver that will serve out files from two different volumes each with different RAID setup. On the linux server we will use the terminal to partition a new hard drive to NTFS and mount it on the filesystem.
+\subsection{Add a second virtual machine and VMNet}
+We will add another VMNet (5) that will act as our DMZ and put a virtual Linux server on it from here on called \textbf{dmzserver}.  To do this and make it communicate with our network we need to manually add another network interface on our linux router on VMNet 5, see figure \figurename \ref{fig:network}.
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\linewidth]{./network}
+\caption[Figure over network in Lab 3]{The network as it should be setup in Lab 3.}
+\label{fig:network}
+\end{figure}
+We also need to put this VMNet 5 in the subnet 203.0.113.160/28 this is because the ISP gateway is configured to route this traffic to VMNet 4 toward the firewall You should be able to ping the machine from both VMNet 9 ,4 and 2.
+\subsection{DNS}
+First install bind9, bind9utils and dnsutils
+\begin{enumerate}
+	\item Turn your internal linux server into a forward and caching DNS-server.  Don’t forget to point the forwarder to 203.0.113.21. You should also point the machines DNS to the localhost 127.0.0.1 (in the same matter as you pointed it to 203.0.113.21 in the first module.)
+		To confirm it is actually caching the data you can use: rndc dumpdb. And locate the cache in: /var/cache/bind/named\_dump.db
+	\item We now setup and make records for our internal network: corp.mycompany.lab. It  should contain records for:
+		\begin{itemize}
+			\item the linux server
+			\item the windows server
+			\item the internal gateway.
+			\item reverse lookup for those hosts.
+		\end{itemize}
+		\item Make the linux server authoritative over mycompany.lab It should at least contain the following records using A or A + CNAME records:
+			\begin{itemize}
+				\item www -> <dmz server>
+				\item altwww -> <dmz server>
+				\item company -> 203.0.113.22
+			\end{itemize}
+		\item Now that we see that we have our own zone we will register it to the ISP. To do this use a computer that refers to the ISP gateway as its DNS server 203.0.113.21 (should be all computers within your virtual enviroment) and direct one of their browsers to www.nic.lab . here you will be able to register a domain.
+			
+			For the registration to work the DNS server needs to be correctly configured. When asked asked for a name server you direct it to: hq-ip-gw.static.lab (This is just an A record pointing to your linux routers external ip 203.0.113.22.)
+			
+			Don’t forget that the DNS traffic (port 53) going from the ISP gateway needs to be forwarded to your internal linux server
+\end{enumerate}
 
-To do these tasks we need to add additional virtual harddrives to the servers. The procedure is simple: settings -> add -> hdd. As we are working with virtual harddrives they run on the physical harddrive and we will ofcourse not be able to see any increased performance. 
+\subsection{DHCP}
+For the DHCP part we will be using the windows server as our DHCP server handing out ip addresses. the first thing is to install the role. Then we will be using the MAC address for our internal computers (except the router) and reserve the IP for the Ubuntu server using the MAC address of the interfaces. You can find the MAC address either on the virtual network adapter ( Virtual Machine Settings -> Network Adapter -> Advanded) or on the machine itself.
 
-Limit the size of the hard drives to about 1 GB.
-Windows Server:
+The ubuntu server and the internal client should not need to specify gateway or DNS manually. All this should be handled by the DHCP server.
 
-Here you will create two volumes:
+\subsection{Web server}
+Install a web server on your newly created \textbf{dmzserver} on VMNet 5.
+\begin{enumerate}
+	\item Then setup two virtual hosts on that server. If your DNS settings are correct you should be able to reach the webserver from any browser on the network using the following addresses:
+		\begin{itemize}
+			\item www.mycompany.lab
+			\item altwww.mycompany.lab
+		\end{itemize}
+		so www.mycompany.lab should show one page and then altwww.mycompany.lab another.
+	\item Make a third page that is only seen when you connect to it using the port 2015.
+		All pages should of course be reacable at the same time.
+\end{enumerate}
 
-\begin{itemize}
-	\item quick: Is intended to be fast and serve alot of data it is used but the data is not considered critical and fast access is more important. This one we will construct as an individiual drive letter.
-	\item important: Here the data is crucial and here we have to implement another RAID soluition.  We also put it into an empty NTFS folder on the system.
-\end{itemize}
-
-Then we need to set up both of these as shares on the network and we will enforce some sharing rules - and for this task we will not add the users to the Active Directory but instead to the local system.
-
-\begin{itemize}
-	\item Create 3 users: Pelle, Lisa and Stina.
-	\item Pelle and Lisa may read and write quick, Stina is only allowed to read it.
-	\item Stina may read and write important, Lisa may read important.
-\end{itemize}
-
-Linux Server:
-
-You will partition the new volume you just added into a functional NTFS drive using the terminal and fdisk. You shall then configure fstab so that on each reboot the drive is remounted.
-
-Lisa, Pelle and Stina with a homefolder each (If you havn’t played around in /etc/adduser.conf you could use the command adduser and the /home/ folders will be located in /home/Pelle ...)
-
-Make Samba share each homefolder so that the respective user can access his/her shares from here. Files created by any of the user should be owned by that user.
-
-The users should only be allowed to read and access their respective folder.
 
 \section{Requirements}
-\label{tasks}
-Aside from keeping the configuration where we left of(static ip's, firewalls , VMNet) It should be set up as in the Assignment. Firewall rules will be checked to be ‘decent’. Remember that if (as it should be) your firewall is properly setup you will need to make exception for the protocols you are implementing f.e. SMB and if you are using SWAT for samba you need to allow that traffic in.
-As previously your configuration should survive a reboot.
-
-\begin{itemize}
-	\item \textbf{Linux Server}
-    \begin{itemize}
-		\item one extra hdd partition as a functional NTFS, mounted on boot.
-		\item 3 Users Stina, Pelle and Lisa.
-		\item Each home directory is shared and can only be accessed by themselves.
-	\end{itemize}
-	\item \textbf{Windows Server}
-	\begin{itemize}
-		\item Create the three local user accounts: Pelle, Lisa and Stina.
-		\item Create one RAID solution from a few of your HDDs for quick file access.(Assume the virtual disks as physical disks) - quick
-		\item Create one RAID solution from a few of your HDDs for secure file storage.(Assume the virtual disks as physical disks) - important
-		\item quick should be mounted as seperate volume index.(f.e. E:)
-		\item important should be mounted as a folder in your NTFS directory. (f.e. C: -> important)
-		\item enforce ACL for "quick" so Pelle and Lisa may both read and write and Stina is only allowed to read.
-		\item enforce ACL for "important" so Stina may read and write, Lisa may read and Pelle is not allowed to even read it.
-	\end{itemize}
-\end{itemize}
+Consider not using the firewall at all when implementing but instead add the rules once you see that all is working. Otherwise it should work as in the assignment description. 
 
 \section{Workenviroment}
 \label{enviroment}
+We will continue to use the lab where we left of. If you get stuck somewhere you can try your luck with another part but to configure DHCP properly you at least need to be done with forwarding part of the DNS (so we can refer to the linux server as our DNS). And to get the virtual hosts working we need the DNS records(unless we circumvent it mapping local hosts)
 
-	As previously we will be using VMware to accomplish this. For this assignment we only need to use the hosts on VMNet2 and the ISP Gateway for internet access.
-
+Good luck!
 \end{document}
