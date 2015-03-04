@@ -14,6 +14,8 @@
 \usepackage{hyperref}
 \usepackage{textcomp}
 \usepackage{xifthen}% provides \isempty test
+\usepackage{listings}% Code examples
+\usepackage{xcolor}
 \pagestyle{fancyplain} % Använd sidhuvud och sidfot på alla sidor
 \fancyhead[L]{Laboration 4 -- 1DV020 -- VT15 -- Server administraion I} % Titel till vänster i sidhuvud
 \fancyhead[C]{} % Tomt i mitten
@@ -22,7 +24,18 @@
 \fancyfoot[C]{}  % Tomt i mitten
 \fancyfoot[R]{\thepage} % Sidnumrering till höger i sidfoten
 \renewcommand\thesection{\arabic{section}} % Section beter sig som i dokumentklassen article
-
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  basicstyle=\footnotesize\ttfamily,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth
+}
 \newcommand{\win}[1]{Microsoft Windows Server\ifthenelse{\isempty{#1}}{}{ #1}}
 \newcommand{\gui}[0]{``Server with a GUI''}
 \newcommand{\core}[0]{Windows Server Core}
@@ -89,65 +102,109 @@ of these lab session, prepare a small document with an overview of your configur
 \section{Assignment}
 The following fours sections with subtasks are the assignment:
 
-\subsection{Add a second virtual machine and VMNet}
-We will add another VMNet (5) that will act as our DMZ and put a virtual Linux server on it from here on called \textbf{dmzserver}.  To do this and make it communicate with our network we need to manually add another network interface on our linux router on VMNet 5, see figure \figurename \ref{fig:network}.
-\begin{figure}[h]
-\centering
-\includegraphics[width=1\linewidth]{./network}
-\caption[Figure over network in Lab 3]{The network as it should be setup in Lab 3.}
-\label{fig:network}
-\end{figure}
-We also need to put this VMNet 5 in the subnet 203.0.113.160/28 this is because the ISP gateway is configured to route this traffic to VMNet 4 toward the firewall You should be able to ping the machine from both VMNet 9 ,4 and 2.
-\subsection{DNS}
-First install bind9, bind9utils and dnsutils
-\begin{enumerate}
-	\item Turn your internal linux server into a forward and caching DNS-server.  Don’t forget to point the forwarder to 203.0.113.21. You should also point the machines DNS to the localhost 127.0.0.1 (in the same matter as you pointed it to 203.0.113.21 in the first module.)
-		To confirm it is actually caching the data you can use: rndc dumpdb. And locate the cache in: /var/cache/bind/named\_dump.db
-	\item We now setup and make records for our internal network: corp.mycompany.lab. It  should contain records for:
-		\begin{itemize}
-			\item the linux server
-			\item the windows server
-			\item the internal gateway.
-			\item reverse lookup for those hosts.
-		\end{itemize}
-		\item Make the linux server authoritative over mycompany.lab It should at least contain the following records using A or A + CNAME records:
-			\begin{itemize}
-				\item www -> <dmz server>
-				\item altwww -> <dmz server>
-				\item company -> 203.0.113.22
-			\end{itemize}
-		\item Now that we see that we have our own zone we will register it to the ISP. To do this use a computer that refers to the ISP gateway as its DNS server 203.0.113.21 (should be all computers within your virtual environment) and direct one of their browsers to www.nic.lab . here you will be able to register a domain.
-			
-			For the registration to work the DNS server needs to be correctly configured. When asked asked for a name server you direct it to: hq-ip-gw.static.lab (This is just an A record pointing to your linux routers external ip 203.0.113.22.)
-			
-			Don’t forget that the DNS traffic (port 53) going from the ISP gateway needs to be forwarded to your internal linux server
-\end{enumerate}
+\subsection{A.D DS Installation}
+Install the Active Directory Domain Services and promote the Windows server to a domain controller.
 
-\subsection{DHCP}
-For the DHCP part we will be using the windows server as our DHCP server handing out ip addresses. the first thing is to install the role. Then we will be using the MAC address for our internal computers (except the router) and reserve the IP for the Ubuntu server using the MAC address of the interfaces. You can find the MAC address either on the virtual network adapter ( Virtual Machine Settings -> Network Adapter -> Advanded) or on the machine itself.
+To be able to have the A.D working properly we need to either delegate the zone corp.mycompany.lab ,so that the linux server instead act as a slave for this zone. Or you can setup a new DNS with forwarders and disable the corp.mycompany.lab on the linux server. This is also a valid workaround. Don't forget to change the DHCP settings.
 
-The ubuntu server and the internal client should not need to specify gateway or DNS manually. All this should be handled by the DHCP server.
+\subsection{A G/U DLP}
+Adopt a AGDLP strategy for the environment specified in the Work Environment, add the users, and groups necessary to accomplish this. You then apply the AGDLP solution on your shares.
 
-\subsection{Web server}
-Install a web server on your newly created \textbf{dmzserver} on VMNet 5.
-\begin{enumerate}
-	\item Then setup two virtual hosts on that server. If your DNS settings are correct you should be able to reach the web server from any browser on the network using the following addresses:
-		\begin{itemize}
-			\item www.mycompany.lab
-			\item altwww.mycompany.lab
-		\end{itemize}
-		so www.mycompany.lab should show one page and then altwww.mycompany.lab another.
-	\item Make a third page that is only seen when you connect to it using the port 2015.
-		All pages should of course be reachable at the same time.
-\end{enumerate}
+\subsection{Join Domain}
+Make your internal client(win 8.1 Bus) join the A.D Domain. It should be visible under the computers tab in your A.D structure when you have joined.
 
+(If you run into problems during this phase and gets stuck there. A temporary workaround is to: Follow the “Grant members the right to logon locally” guide to enable logon with local users. This is as said only a temporary solution. But you could confirm that delegation and group policies are working.)
+
+\subsection{Delegation}
+Make sure that the following delegations are in effect and make sure you use and AGDLP strategy for this too.
+\paragraph{Human Resources:}
+\begin{itemize}
+	\item Should be able to read user information on all sectors.
+\end{itemize}
+
+\paragraph{Call Center Manager:}
+\begin{itemize}
+	\item Should be able to add, modify and delete regular Callcenter users, but not managers.
+	\item Should be able to add, modify and delete regular IT Support users.
+\end{itemize}
+
+\paragraph{IT Support:}
+Not the same as administrators!
+\begin{itemize}
+	\item Should be able to add, modify, delete and reset password for Callcenter employees, but not Call Center managers.
+	\item Should be able to add, modify and delete regular and reset password for Human resources users.
+\end{itemize}
+
+\subsection{Group Policies}
+Apply group policies. Try at least 4 group policies and confirm that they are working and affecting only the users in the Call Center OU.
+Apply a group policy that only affects the computers of your domain.
+Confirm the policies are taking effect.
+
+\subsection{Roaming profiles}
+Create a roaming profile for at least one user.
 
 \section{Requirements}
-Consider not using the firewall at all when implementing but instead add the rules once you see that all is working. Otherwise it should work as in the assignment description. 
+The AGDLP strategy should be working.
 
-\section{Workenviroment}
-\label{enviroment}
-We will continue to use the lab where we left of. If you get stuck somewhere you can try your luck with another part but to configure DHCP properly you at least need to be done with forwarding part of the DNS (so we can refer to the linux server as our DNS). And to get the virtual hosts working we need the DNS records(unless we circumvent it mapping local hosts)
+If you wish to continue using your current DNS solution you can modify the corp.mycompany.lab zone to act as a slave in your bind configuration and specify the the windows computer as the master for that domain. This of course requires the windows server to be set as  authoritative over that domain.
 
-Good luck!
+It should look something like this:
+\begin{lstlisting}[style=BashInputStyle]
+zone "corp.mycompany.lab" {
+    	type slave;
+    	masters {<ip of windows server>};
+}
+\end{lstlisting}
+\section{Work Enviroment}
+We will assume that the primary role of the company is a call center. We will also assume that we have a decent amount of employees ~50(but for the lab we don’t need to set up all of them!)
+\subsection{Sections Layout}
+In the environment there should exist the following sections, with employees:
+\begin{itemize}
+	\item IT Support
+	\begin{itemize}
+		\item Pelle
+	\end{itemize}
+\end{itemize}
+\begin{itemize}
+	\item Human Resources
+	\begin{itemize}
+		\item Stina
+		\item John
+	\end{itemize}
+\end{itemize}
+\begin{itemize}
+	\item Call Center
+	\begin{itemize}
+		\item Manager	
+		\begin{itemize}
+			\item Johan
+		\end{itemize}
+		
+		\item Employees	
+		\begin{itemize}
+			\item Marcus
+			\item Calina
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\subsection{Resources}
+The following resources should be shared according to your AGDLP solution:
+\paragraph{Shares:}
+\begin{itemize}
+	\item Quick:
+	\begin{itemize}
+		\item IT Support have full control
+		\item Call Center Manager have read and modify Access
+		\item  Call Center Employees have read access
+		\item  Human resources have read access.
+	\end{itemize}
+	\item Mirror:
+	\begin{itemize}
+		\item Call Center manager have full control
+		\item  Call Center Employees have Read Access.
+		\item  IT support have full control.
+	\end{itemize}
+\end{itemize}
+		
 \end{document}
