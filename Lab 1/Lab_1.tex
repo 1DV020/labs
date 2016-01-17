@@ -15,10 +15,10 @@
 \usepackage{textcomp}
 \usepackage{xifthen}% provides \isempty test
 \pagestyle{fancyplain} % Använd sidhuvud och sidfot på alla sidor
-\fancyhead[L]{Laboration 1 -- 1DV020 -- VT15 -- Server administraion I} % Titel till vänster i sidhuvud
+\fancyhead[L]{Laboration 1 -- 1DV720 -- Spring 2016 -- Server Administraion I} % Titel till vänster i sidhuvud
 \fancyhead[C]{} % Tomt i mitten
 \fancyhead[R]{} % Tomt till höger
-\fancyfoot[L]{{\color{gray}\textcopyright \ 2015 Jacob Lindehoff, Kristoffer Schill}} % Tomt till vänster
+\fancyfoot[L]{{\color{gray}\textcopyright \ 2016 Jacob Lindehoff}} % Tomt till vänster
 \fancyfoot[C]{}  % Tomt i mitten
 \fancyfoot[R]{\thepage} % Sidnumrering till höger i sidfoten
 \renewcommand\thesection{\arabic{section}} % Section beter sig som i dokumentklassen article
@@ -47,7 +47,7 @@
     \textsc{Linnéuniversitetet} \\ [25pt] % Universitetes namn
     \horrule{0.5pt} \\[0.4cm] % Tunn linje högst upp
     \huge Laboration 1\\ % Arbetes titel
-	\large \textcolor{gray}{1DV020 -- Serveradministraion}
+	\large \textcolor{gray}{1DV720 -- Server Administraion}
     \horrule{0.5pt} \\[0.4cm] % Tunn linje längst ner
 }
 
@@ -66,12 +66,12 @@
 %------------------------------------------------
 \section{Introduction}
 
-You are an IT-technican on a small newly founded company and the board have given you the task to install the company's first servers and clients. There are some requirements on the system that you should find in Requirements~\ref{tasks}
+You are an It-Technician on a small newly founded company and the board have given you the task to install the company's first servers and clients. There are some requirements on the system that you should find in Requirements~\ref{tasks}
 
-It is importaint that you have read the lab thoroughly before you start with the laboration. You must follow the instructions under workenviroment ~\ref{enviroment}.
+It is important that you have read the lab thoroughly before you start with the laboration. You must follow the instructions under Work Environment~\ref{environment}.
 
 All machines that are created are saved under your own folder in: \newline
-\textbf{C:\textbackslash VirtualLabs\textbackslash Courses\textbackslash 1DV020\textbackslash users\textbackslash 2015\textbackslash [your username]\textbackslash }
+\textbf{C:\textbackslash VirtualLabs\textbackslash Courses\textbackslash 1DV720\textbackslash users\textbackslash 2016\textbackslash [your username]\textbackslash }
 
 %------------------------------------------------
 %	Deadline
@@ -107,11 +107,11 @@ Aside from the network sketch there are some requirements the company have:
     \begin{itemize}
         \item have static ip-addressing, the addresses is up to you to decide but you should be able to motivate your choice. 
 	\item should have internet access using the linux router.
-	\item shoule be able to ping eachother on the their respective VMNet.
+	\item should be able to ping each other on the their respective VMNet.
         \item have proper firewall rules. This includes both the linux and windows machines.
     	\item Have a proper naming convention.
     \end{itemize}
-	\item Specific machinerequirements:
+	\item Specific machine requirements:
     \begin{itemize}
         \item \textbf{ISP Gateway}
         \begin{itemize}
@@ -119,7 +119,7 @@ Aside from the network sketch there are some requirements the company have:
         	\item The template is located at \textbf{c:\textbackslash VirtualLabs\textbackslash Files\textbackslash Templates\textbackslash ISP Gateway Template (2015)\textbackslash }
         \end{itemize}
 
-        \item \textbf{Linuxrouter}
+        \item \textbf{Linux router}
         \begin{itemize}
 		\item should have two network interfaces, one for VMnet 4 pointing to the ISP Gateway and one for the local Server LAN VMnet2.
             	\item The ISP pointing interface should be configured according to the network sketch in \figurename \ref{fig:network}, \textit{Observe! To be able to lookups it needs to use the ISP Gateways DNS server.}
@@ -133,16 +133,16 @@ Aside from the network sketch there are some requirements the company have:
     \end{itemize}
 \end{itemize}
 
-\section{Workenviroment}
-\label{enviroment}
+\section{Work Environment}
+\label{environment}
 
 You will be using VMware Workstation to be able to accomplish this lab. You will only use templates for the ISP Gateway in this lab. The rest is up to you to construct from isofiles.
  
-To be able to start this laboration you need to have signed up for MSNDAA and a labbgroup. When you have done this it takes up to a workday before you are put into the system.
+To be able to start this laboration you need to have signed up for MSNDAA and a labgroup. When you have done this it takes up to a workday before you are put into the system.
 
-For the Linux router and Linux Server you will have to download .iso files for your favourite linux server distrubution such as Ubuntu Server 14.04
+For the Linux router and Linux Server you will have to download .iso files for your favorite linux server distribution such as Ubuntu Server 15.04
 
 \paragraph{ISO} At your disposal there are \win{2012 R2} och Windows 8.1 ISOs on 
-C:\textbackslash VirtualLabs\textbackslash Files\textbackslash MSDNAA\textbackslash Operating Systems
+C:\textbackslash VirtualLabs\textbackslash Files\textbackslash CD\textbackslash Operating Systems
 %kolla upp var imorgon.
 \end{document}
