@@ -15,10 +15,10 @@
 \usepackage{textcomp}
 \usepackage{xifthen}% provides \isempty test
 \pagestyle{fancyplain} % Använd sidhuvud och sidfot på alla sidor
-\fancyhead[L]{Laboration 1 -- 1DV720 -- Spring 2016 -- Server Administraion I} % Titel till vänster i sidhuvud
+\fancyhead[L]{Laboration 1 -- 1DV720 -- Spring 2017 -- Server Administraion I} % Titel till vänster i sidhuvud
 \fancyhead[C]{} % Tomt i mitten
 \fancyhead[R]{} % Tomt till höger
-\fancyfoot[L]{{\color{gray}\textcopyright \ 2016 Jacob Lindehoff}} % Tomt till vänster
+\fancyfoot[L]{{\color{gray}\textcopyright \ 2017 Jacob Lindehoff}} % Tomt till vänster
 \fancyfoot[C]{}  % Tomt i mitten
 \fancyfoot[R]{\thepage} % Sidnumrering till höger i sidfoten
 \renewcommand\thesection{\arabic{section}} % Section beter sig som i dokumentklassen article
@@ -70,17 +70,15 @@ You are an It-Technician on a small newly founded company and the board have giv
 
 It is important that you have read the lab thoroughly before you start with the laboration. You must follow the instructions under Work Environment~\ref{environment}.
 
-All machines that are created are saved under your own folder in: \newline
-\textbf{C:\textbackslash VirtualLabs\textbackslash Courses\textbackslash 1DV720\textbackslash users\textbackslash 2016\textbackslash [your username]\textbackslash }
 
 %------------------------------------------------
 %	Deadline
 %------------------------------------------------
 \section{Deadline}
 
-There are two laboratory sessions connected to this module, at these sessions you are given the opportunity to get help if so needed. To be able to finish the modules you are likely needed to spend more time on your own.
+There are one laboratory sessions connected to this module, at this session you are given the opportunity to get help if so needed. To be able to finish the modules you are likely needed to spend more time on your own.
 
-\paragraph{Accounting} You will show your work and demonstrate your progress at any of these lab session, prepare a small document with an overview of your configuration/setup if needed for overview.
+\paragraph{Accounting} You will show your work and demonstrate your progress at this lab session, prepare a small document with an overview of your configuration/setup if needed for overview.
 
 \pagebreak
 %------------------------------------------------
@@ -89,14 +87,15 @@ There are two laboratory sessions connected to this module, at these sessions yo
 \section{Assignment}
 \begin{figure}[h]
 \centering
-\includegraphics[width=1\linewidth]{./network}
+\includegraphics[width=1\linewidth]{./Lab01-Network}
 \caption[Figure over network in Lab 1]{The network as it should be setup in Lab 1.}
 \label{fig:network}
 \end{figure}
 You have been given the task to configure a newly founded company's network. In \figurename \ref{fig:network} you should see how the network should look when you are done with lab 1.
 
-The topology contains one Linux server, one Windows Server 2012 R2 , one Linux machine as a router and one Windows 8.1 client on the internal. all of these should be connected to VMnet2. The Linux router is also connected to the ISP Gateway with the VMNet 4.
-We will also have an external client on VMNet 9.
+The topology contains one Linux server, one Windows Server 2012 R2 and one Windows 10 client that should be use as an administration client. All of these should be connected to the LAN network. 
+
+\pagebreak
 
 \section{Requirements}
 \label{tasks}
@@ -105,44 +104,26 @@ Aside from the network sketch there are some requirements the company have:
 \begin{itemize}
     \item All machines should:
     \begin{itemize}
-        \item have static ip-addressing, the addresses is up to you to decide but you should be able to motivate your choice. 
-	\item should have internet access using the linux router.
-	\item should be able to ping each other on the their respective VMNet.
+		\item should have internet access.
+		\item should be able to ping each other .
         \item have proper firewall rules. This includes both the linux and windows machines.
-    	\item Have a proper naming convention.
+    	\item have a proper naming convention.
     \end{itemize}
 	\item Specific machine requirements:
     \begin{itemize}
-        \item \textbf{ISP Gateway}
+        \item \textbf{Admin Client}
         \begin{itemize}
-		\item This is the only machine that you will not install yourself, it is a predefined machine that you will make a linked clone of.
-        	\item The template is located at \textbf{c:\textbackslash VirtualLabs\textbackslash Files\textbackslash Templates\textbackslash ISP Gateway Template (2015)\textbackslash }
-        \end{itemize}
-
-        \item \textbf{Linux router}
-        \begin{itemize}
-		\item should have two network interfaces, one for VMnet 4 pointing to the ISP Gateway and one for the local Server LAN VMnet2.
-            	\item The ISP pointing interface should be configured according to the network sketch in \figurename \ref{fig:network}, \textit{Observe! To be able to lookups it needs to use the ISP Gateways DNS server.}
-        \end{itemize}
-        
-        \item \textbf{Other OS}
-        \begin{itemize}
-		\item Only be connected to their respective VMNet.
-        \end{itemize}
-        
+			\item This is the only machine that should be able to contact from Internet using RDP
+			\item Only RDP traffic should be allowed from Internet
+        	\item It should have an strong an complex password.
+        	\item You should be able to administer other LAN server from this machine using SSH and RDP
+        \end{itemize}        
     \end{itemize}
 \end{itemize}
 
 \section{Work Environment}
 \label{environment}
 
-You will be using VMware Workstation to be able to accomplish this lab. You will only use templates for the ISP Gateway in this lab. The rest is up to you to construct from isofiles.
- 
-To be able to start this laboration you need to have signed up for MSNDAA and a labgroup. When you have done this it takes up to a workday before you are put into the system.
+You will be using FTK Lab Cloud to be able to accomplish this lab. You will find your credentials and tutorial on how to get started on this page: \href{https://coursepress.lnu.se/kurs/serveradministration/lab-cloud/}{https://coursepress.lnu.se/kurs/serveradministration/lab-cloud/}
 
-For the Linux router and Linux Server you will have to download .iso files for your favorite linux server distribution such as Ubuntu Server 15.04
-
-\paragraph{ISO} At your disposal there are \win{2012 R2} och Windows 8.1 ISOs on 
-C:\textbackslash VirtualLabs\textbackslash Files\textbackslash CD\textbackslash Operating Systems
-%kolla upp var imorgon.
 \end{document}
