@@ -15,10 +15,10 @@
 \usepackage{textcomp}
 \usepackage{xifthen}% provides \isempty test
 \pagestyle{fancyplain} % Använd sidhuvud och sidfot på alla sidor
-\fancyhead[L]{Laboration 2 -- 1DV720 -- 2016 -- Server administraion} % Titel till vänster i sidhuvud
+\fancyhead[L]{Laboration 2 -- 1DV720 -- \the\year -- Server administration} % Titel till vänster i sidhuvud
 \fancyhead[C]{} % Tomt i mitten
 \fancyhead[R]{} % Tomt till höger
-\fancyfoot[L]{{\color{gray}\textcopyright \ 2016 Jacob Lindehoff}} % Tomt till vänster
+\fancyfoot[L]{{\color{gray}\textcopyright \ \the\year \ Jacob Lindehoff}} % Tomt till vänster
 \fancyfoot[C]{}  % Tomt i mitten
 \fancyfoot[R]{\thepage} % Sidnumrering till höger i sidfoten
 \renewcommand\thesection{\arabic{section}} % Section beter sig som i dokumentklassen article
@@ -44,10 +44,10 @@
 
 \title{	\vspace{-10cm}
     \normalfont \normalsize
-    \textsc{Linnaeus Universit} \\ [25pt] % Universitetes namn
+    \textsc{Linnaeus University} \\ [25pt] % Universitetes namn
     \horrule{0.5pt} \\[0.4cm] % Tunn linje högst upp
     \huge Laboration 2\\ % Arbetes titel
-	\large \textcolor{gray}{1DV720 -- Server Administraion}
+	\large \textcolor{gray}{1DV720 -- Server Administration}
     \horrule{0.5pt} \\[0.4cm] % Tunn linje längst ner
 }
 
@@ -66,7 +66,7 @@
 %------------------------------------------------
 \section{Introduction}
 
-For this lab we will look into filesystems, partitioning, permissions and how these can be applied in a server enviroment. We will use the enviroment from the point we left of.
+For this lab we will look into filesystems, partitioning, permissions and how these can be applied in a server environment. We will modify the lab environment, you can reuse some machine or start from scratch and delete all machines from lab 1. Before you delete any machine make sure that you have passed Lab 1.
 
 %------------------------------------------------
 %	Deadline
@@ -82,66 +82,78 @@ There are two laboratory sessions connected to this module, at these sessions yo
 %	Uppgift
 %------------------------------------------------
 \section{Assignment}
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\linewidth]{./Lab02-Network}
+\caption[Figure over network in Lab 2]{The network as it should be setup in Lab 2.}
+\label{fig:network}
+\end{figure}
+Now that you have set up the basic network and made sure the machines can communicate, it's time to move on and configure some file servers. In \figurename \ref{fig:network} you should see how the network should look when you are done with lab 2.
 
-Your task now is to do a few different operations on both the linux and the windows servers. First you will set up a fileserver that will serve out files from two different volumes each with different RAID setup. On the linux server we will use the terminal to partition a new hard drive to NTFS and mount it on the filesystem.
+The topology contains two separated networks, one is for the internal network witch shouldn't be be able to contact from the outside. The other network is for servers that should be publicly access like Web servers and Name servers. In the internal network called LAN you should have three machines, one Admin Server from where you will manages all of the machine both in the LAN and the DMZ. The second server in the LAN should be a Windows file server and the last machine is a client machine that will be used to test the permissions on the file server. In the second network, DMZ, you should have two Linux server. One file server, that later on will be used for the web servers, and one server to test connectivity and permissions of the file server.
 
-To do these tasks we need to add additional virtual harddrives to the servers. The procedure is simple: settings -> add -> hdd. As we are working with virtual harddrives they run on the physical harddrive and we will ofcourse not be able to see any increased performance. 
-
-Limit the size of the hard drives to about 1 GB.
-Windows Server:
-
-Here you will create two volumes:
-
-\begin{itemize}
-	\item quick: Is intended to be fast and serve alot of data it is used but the data is not considered critical and fast access is more important. This one we will construct as an individiual drive letter.
-	\item important: Here the data is crucial and here we have to implement another RAID soluition.  We also put it into an empty NTFS folder on the system.
-\end{itemize}
-
-Then we need to set up both of these as shares on the network and we will enforce some sharing rules - and for this task we will not add the users to the Active Directory but instead to the local system.
-
-\begin{itemize}
-	\item Create 3 users: Pelle, Lisa and Stina.
-	\item Pelle and Lisa may read and write quick, Stina is only allowed to read it.
-	\item Stina may read and write important, Lisa may read important.
-\end{itemize}
-
-Linux Server:
-
-You will partition the new volume you just added into a functional NTFS drive using the terminal and fdisk. You shall then configure fstab so that on each reboot the drive is remounted.
-
-Lisa, Pelle and Stina with a homefolder each (If you havn’t played around in /etc/adduser.conf you could use the command adduser and the /home/ folders will be located in /home/Pelle ...)
-
-Make Samba share each homefolder so that the respective user can access his/her shares from here. Files created by any of the user should be owned by that user.
-
-The users should only be allowed to read and access their respective folder.
+\pagebreak
 
 \section{Requirements}
 \label{tasks}
-Aside from keeping the configuration where we left of(static ip's, firewalls , VMNet) It should be set up as in the Assignment. Firewall rules will be checked to be ‘decent’. Remember that if (as it should be) your firewall is properly setup you will need to make exception for the protocols you are implementing f.e. SMB and if you are using SWAT for samba you need to allow that traffic in.
+As in the first lab, security is important and all machines should have there firewalls enabled. Firewall rules will be checked to be ‘decent’. Remember that if (as it should be) your firewall is properly setup you will need to make exception for the protocols you are implementing.
 As previously your configuration should survive a reboot.
 
 \begin{itemize}
-	\item \textbf{Linux Server}
+    \item All machines should:
     \begin{itemize}
-		\item one extra hdd partition as a functional NTFS, mounted on boot.
-		\item 3 Users Stina, Pelle and Lisa.
-		\item Each home directory is shared and can only be accessed by themselves.
-	\end{itemize}
-	\item \textbf{Windows Server}
-	\begin{itemize}
-		\item Create the three local user accounts: Pelle, Lisa and Stina.
-		\item Create one RAID solution from a few of your HDDs for quick file access.(Assume the virtual disks as physical disks) - quick
-		\item Create one RAID solution from a few of your HDDs for secure file storage.(Assume the virtual disks as physical disks) - important
-		\item quick should be mounted as seperate volume index.(f.e. E:)
-		\item important should be mounted as a folder in your NTFS directory. (f.e. C: -> important)
-		\item enforce ACL for "quick" so Pelle and Lisa may both read and write and Stina is only allowed to read.
-		\item enforce ACL for "important" so Stina may read and write, Lisa may read and Pelle is not allowed to even read it.
-	\end{itemize}
+		\item should have internet access
+		\item within the same network be able to ping each other
+		\item not be able to contact each other if not in the same network, except for the Admin Server
+        \item have proper firewall rules. This includes both the linux and windows machines
+    	\item have a proper naming convention.
+    \end{itemize}
+	\item Specific machine requirements:
+    \begin{itemize}
+        \item \textbf{LAN} - Admin Server
+        \begin{itemize}
+			\item OS: Windows Server 2012 R2 \textbf{GUI}
+			\item This is the only machine that should be able to contact from Internet using RDP
+			\item Only RDP traffic should be allowed from Internet
+        	\item It should have an strong an complex password.
+        	\item You should be able to manage other servers/clients, both in LAN and DMZ, from this machine using SSH and RDP
+        \end{itemize}        
+        \item \textbf{LAN} - File Server
+        \begin{itemize}
+			\item OS: Windows Server 2012 R2 \textbf{Core}
+			\item should have 3 volume connected to it that should be configured as one volume with RAID 5 and formatted with NTFS. \textbf{Only use 1 GB volumes}.
+			\item this new volume should have a shared folder with different permissions for different users
+			\item you should have at least 3 different users with different file permissions on the share, they should not have access to other parts of the server.
+        \end{itemize}
+        \item \textbf{LAN} - Windows Client
+        \begin{itemize}
+			\item OS: Windows 10
+			\item should be able to connect to the file server
+			\item you should be able to login with have at least 3 different users that should have different file permissions on the file server
+        \end{itemize}
+        \item \textbf{DMZ} - File server
+        \begin{itemize}
+			\item OS: Ubuntu 16.04
+			\item should have one extra volume configured and formatted with an appropriate file system
+			\item this volume should be used to share a folder with NFS
+			\item you should configure an extra user account that should have read and write permissions on the shared folder. That user should not have other permissions on the file server
+        \end{itemize}
+        \item \textbf{DMZ} - Test server
+        \begin{itemize}
+			\item OS: Ubuntu 16.04
+			\item should have the file server share mounted
+        \end{itemize}  
+    \end{itemize}
 \end{itemize}
 
-\section{Workenviroment}
-\label{enviroment}
 
-	As previously we will be using VMware to accomplish this. For this assignment we only need to use the hosts on VMNet2 and the ISP Gateway for internet access.
+
+\section{Work Environment}
+\label{environment}
+
+You will be using FTK Lab Cloud to be able to accomplish this lab. You will find your credentials and tutorial on how to get started on this page: \href{https://coursepress.lnu.se/kurs/serveradministration/lab-cloud/}{https://coursepress.lnu.se/kurs/serveradministration/lab-cloud/}
+
+For this lab I have also created a video tutorial on how to set up an admin server and the basics for this lab. You'll find it on the \texttt{\href{https://coursepress.lnu.se/kurs/serveradministration/moduler/modul-2/laboration/}{course homepage}}.
+
 
 \end{document}
