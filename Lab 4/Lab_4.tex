@@ -17,10 +17,10 @@
 \usepackage{listings}% Code examples
 \usepackage{xcolor}
 \pagestyle{fancyplain} % Använd sidhuvud och sidfot på alla sidor
-\fancyhead[L]{Laboration 4 -- 1DV720 -- Spring 20016 -- Server Administraion} % Titel till vänster i sidhuvud
+\fancyhead[L]{Laboration 4 -- 1DV720 -- \the\year -- Server Administraion} % Titel till vänster i sidhuvud
 \fancyhead[C]{} % Tomt i mitten
 \fancyhead[R]{} % Tomt till höger
-\fancyfoot[L]{{\color{gray}\textcopyright \ 2016 Jacob Lindehoff}} % Tomt till vänster
+\fancyfoot[L]{{\color{gray}\textcopyright \ 	\the\year \ Jacob Lindehoff}} % Tomt till vänster
 \fancyfoot[C]{}  % Tomt i mitten
 \fancyfoot[R]{\thepage} % Sidnumrering till höger i sidfoten
 \renewcommand\thesection{\arabic{section}} % Section beter sig som i dokumentklassen article
@@ -87,12 +87,9 @@ We will then setup group policies on these and assure that we have a proper dele
 %	Deadline
 %------------------------------------------------
 \section{Deadline}
-There is only one lab session connected to this module. It is of course okay to present on the following lab.
+There are two laboratory sessions connected to this module, at these sessions you are given the opportunity to get help if so needed. To be able to finish the modules you are likely needed to spend more time on your own.
 
-\paragraph{Accounting} You will show your work and demonstrate your progress at any
-of these lab session, prepare a small document with an overview of your configuration/setup if needed for overview.
-
-\paragraph{Note:} To test the environment I will be using the program \textbf{smbclient} from your internal server so make sure that this is installed there. I will also make changes to your groups/add other groups to make sure that the AGDLP is working.
+\paragraph{Accounting} You will show your work and demonstrate your progress at any of these lab session, prepare a small document with an overview of your configuration/setup if needed for overview.
 
 
 \pagebreak
@@ -100,26 +97,32 @@ of these lab session, prepare a small document with an overview of your configur
 %	Uppgift
 %------------------------------------------------
 \section{Assignment}
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\linewidth]{./Lab04-Network}
+\caption[Figure over network in Lab 4]{The network as it should be setup in Lab 4.}
+\label{fig:network}
+\end{figure}
+
+
 The following fours sections with subtasks are the assignment:
 
 \subsection{A.D DS Installation}
-Install the Active Directory Domain Services and promote the Windows server to a domain controller.
+Add a new Windows Server 2012 Core and install the Active Directory Domain Services and promote the Windows server to a domain controller.
 
-To be able to have the A.D working properly we need to either delegate the zone corp.mycompany.lab ,so that the linux server instead act as a slave for this zone. Or you can setup a new DNS with forwarders and disable the corp.mycompany.lab on the linux server. This is also a valid workaround. Don't forget to change the DHCP settings.
+During the AD setup the server should configure a new DNS server. All the machines in the LAN should now be configured to use this DNS Server. Before you change all the network settings make sure that the DNS forwarder is correctly configure on the DNS server.
 
 \subsection{A G/U DLP}
 Adopt a AGDLP strategy for the environment specified in the Work Environment, add the users, and groups necessary to accomplish this. You then apply the AGDLP solution on your shares.
 
 \subsection{Join Domain}
-Make your internal client(win 8.1 Bus) join the A.D Domain. It should be visible under the computers tab in your A.D structure when you have joined.
-
-(If you run into problems during this phase and gets stuck there. A temporary workaround is to: Follow the “Grant members the right to logon locally” guide to enable logon with local users. This is as said only a temporary solution. But you could confirm that delegation and group policies are working.)
+All internal clients and server in the LAN should join the A.D Domain. They should be visible under the computers tab in your A.D structure when you have joined.
 
 \subsection{Delegation}
 Make sure that the following delegations are in effect and make sure you use and AGDLP strategy for this too.
 \paragraph{Human Resources:}
 \begin{itemize}
-	\item Should be able to read user information on all sectors.
+	\item Should be able to read user information on all departments.
 \end{itemize}
 
 \paragraph{Call Center Manager:}
@@ -144,25 +147,16 @@ Confirm the policies are taking effect.
 Create a roaming profile for at least one user.
 
 \section{Requirements}
-The AGDLP strategy should be working.
+As in the previous labs, security is important and all machines should have there firewalls enabled. Firewall rules will be checked to be ‘decent’. Remember that if (as it should be) your firewall is properly setup you will need to make exception for the protocols you are implementing.
+As previously your configuration should survive a reboot.
 
-If you wish to continue using your current DNS solution you can modify the corp.mycompany.lab zone to act as a slave in your bind configuration and specify the the windows computer as the master for that domain. This of course requires the windows server to be set as  authoritative over that domain.
-
-It should look something like this:
-\begin{lstlisting}[style=BashInputStyle]
-zone "corp.mycompany.lab" {
-    	type slave;
-    	masters {<ip of windows server>};
-}
-\end{lstlisting}
-\section{Work Enviroment}
 We will assume that the primary role of the company is a call center. We will also assume that we have a decent amount of employees ~50(but for the lab we don’t need to set up all of them!)
 \subsection{Sections Layout}
-In the environment there should exist the following sections, with employees:
+In the environment there should exist the following departments, with employees:
 \begin{itemize}
 	\item IT Support
 	\begin{itemize}
-		\item Pelle
+		\item Charles
 	\end{itemize}
 \end{itemize}
 \begin{itemize}
@@ -192,19 +186,24 @@ In the environment there should exist the following sections, with employees:
 The following resources should be shared according to your AGDLP solution:
 \paragraph{Shares:}
 \begin{itemize}
-	\item Quick:
+	\item Share:
 	\begin{itemize}
 		\item IT Support have full control
 		\item Call Center Manager have read and modify Access
 		\item  Call Center Employees have read access
 		\item  Human resources have read access.
 	\end{itemize}
-	\item Mirror:
+	\item Managers:
 	\begin{itemize}
 		\item Call Center manager have full control
 		\item  Call Center Employees have Read Access.
 		\item  IT support have full control.
 	\end{itemize}
 \end{itemize}
-		
+
+\section{Work Enviroment}
+
+You will be using FTK Lab Cloud to be able to accomplish this lab. You will find your credentials and tutorial on how to get started on this page: \href{https://coursepress.lnu.se/kurs/serveradministration/lab-cloud/}{https://coursepress.lnu.se/kurs/serveradministration/lab-cloud/}
+
+Good luck!
 \end{document}
