@@ -9,6 +9,7 @@
 *.fls
 *.out
 *.toc
+*.xdv
 
 ## Intermediate documents:
 *.dvi
@@ -113,3 +114,6 @@ sympy-plots-for-*.tex/
 
 # xindy
 *.xdy
+
+#.vscode
+*.vscode
